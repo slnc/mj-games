@@ -9,7 +9,7 @@ import csv
 import random
 
 # START CONFIG
-_NUM_NPCs = 10  # number of NPCs to generate
+_NUM_NPCS = 10  # number of NPCs to generate
 _P_FEMALE = 0.5  # probability of the NPC being female
 # END CONFIG
 
@@ -79,5 +79,5 @@ def get_probability(profession, gender):
 
 
 if __name__ == '__main__':
-    for _ in range(_NUM_NPCs):
+    for _ in range(_NUM_NPCS):
         print('%s %s' % generate_npc())
