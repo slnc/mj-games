@@ -1,6 +1,8 @@
+#!/usr/bin/python
 '''NPCs (non-player-characters) generator.
 
-Edit CONFIG block to change the behavior of the script.
+1. (Optional) Edit CONFIG block to change the behavior of the script.
+2. Run the script ./generate_npcs.py.
 '''
 
 import csv
