@@ -66,7 +66,7 @@ def generate_profession(gender):
 
         last_profession = profession
 
-    return last_profession  # needed to handle float rounding errors
+    return last_profession  # needed to handle float rounding issues
 
 
 def get_probability(profession, gender):

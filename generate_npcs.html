@@ -1,0 +1,113 @@
+<!-- Javascript version of generate_npcs.py. Check that file for deetails. -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>NPC Generator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: arial;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #npc {
+      margin: 12px 0;
+      font-size: 18px;
+    }
+  </style>
+  <script>
+    const P_FEMALE = 0.5;
+    const MALE = "male";
+    const FEMALE = "female";
+
+    // column 1: job name
+    // column 2: probability for a male NPC
+    // column 3: probability for a female NPC
+    JOBS_JSON = `[
+  ["blacksmith", 0.7, 0.1],
+  ["innkeeper", 0.2, 0.2],
+  ["cook", 0.1, 0.7]
+]`;
+
+    const JSON_P_JOB_IDX = 0;
+    const JSON_P_MALE_IDX = 1;
+    const JSON_P_FEMALE_IDX = 2;
+
+    function generateNPC() {
+      gender = generateGender();
+      job = generateJob(gender);
+      $('#npc').text(`${gender} ${job}`);
+    }
+
+    function generateJob(gender) {
+      let jobs = JSON.parse(JOBS_JSON);
+      let pThreshold = Math.random();
+      let sumProbabilities = 0;
+
+      for (let i = 0; i < jobs.length; i++) {
+        let jobData = jobs[i]; // eg. jobData = ["blacksmith", 0.7, 0.1]
+
+        sumProbabilities += getProbability(jobData, gender);
+
+        if (sumProbabilities >= pThreshold) {
+          return jobData[JSON_P_JOB_IDX];
+        }
+      }
+
+      // return last job, needed to handle float rounding issues
+      return jobs[jobs.length - 1][JSON_P_JOB_IDX];
+    }
+
+    function getProbability(jobData, gender) {
+      // eg. jobData = ["blacksmith", 0.7, 0.1]
+      let pColumn = JSON_P_MALE_IDX;
+      if (gender == FEMALE) {
+        pColumn = JSON_P_FEMALE_IDX;
+      }
+      let p = parseFloat(jobData[pColumn]);
+      return p;
+    }
+
+    function generateGender() {
+      if (Math.random() < P_FEMALE) {
+        return FEMALE;
+      }
+      return MALE;
+    }
+
+    // https://stackoverflow.com/a/7431565/722456
+    function csvToArray(allText) {
+      var recordNum = 3; // or however many elements there are in each row
+      var allTextLines = allText.split(/\r\n|\n|\r/);
+      var entries = allTextLines[0].split(',');
+      var lines = [];
+
+      console.log(`entries: ${entries}`);
+      var headings = entries.splice(0, recordNum);
+      console.log(`headings: ${headings}`);
+      while (entries.length > 0) {
+        var tarr = [];
+        for (var j = 0; j < record_num; j++) {
+          tarr.push(headings[j] + ":" + entries.shift());
+        }
+        lines.push(tarr);
+      }
+      alert(JSON.stringify(lines));
+      return lines;
+    }
+
+    $(function () {
+      // this code will get executed when the document has finished loading.
+      $('#generateNPCBtn').on('click', generateNPC);
+    });
+  </script>
+</head>
+
+<body>
+  <input type="button" value="Generate NPC" id="generateNPCBtn" />
+  <div id="npc"></div>
+</body>
+
+</html>
